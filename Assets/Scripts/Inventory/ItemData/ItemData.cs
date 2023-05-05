@@ -30,7 +30,7 @@ public class ItemData : ScriptableObject
 
     public int RequiredSpace 
     { 
-        get { return Mathf.Max(1, requiredSpace); }
+        get { return Mathf.Max(0, requiredSpace); }
         protected set { requiredSpace = value; } 
     }
     [SerializeField] private int requiredSpace = 1;

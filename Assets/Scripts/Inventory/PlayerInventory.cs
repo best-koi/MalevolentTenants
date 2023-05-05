@@ -21,18 +21,6 @@ public class PlayerInventory : MonoBehaviour
         // DontDestroyOnLoad(this);
     }
 
-    private bool ValidateSpace(int requiredSpace)
-    {
-        int availableSpace = maxInventorySpace;
-
-        foreach (InventoryItem item in inventory)
-        {
-            availableSpace -= item.Data.RequiredSpace;
-        }
-
-        return availableSpace >= requiredSpace;
-    }
-
     public bool AddItem(InventoryItem newItem)
     {
         if (newItem == null) return false;
@@ -144,6 +132,18 @@ public class PlayerInventory : MonoBehaviour
         if (item == null) return false;
 
         return item.Validate();
+    }
+
+    private bool ValidateSpace(int requiredSpace)
+    {
+        int availableSpace = maxInventorySpace;
+
+        foreach (InventoryItem item in inventory)
+        {
+            availableSpace -= item.Data.RequiredSpace;
+        }
+
+        return availableSpace >= requiredSpace;
     }
 
     private bool DestroyItem(InventoryItem item)

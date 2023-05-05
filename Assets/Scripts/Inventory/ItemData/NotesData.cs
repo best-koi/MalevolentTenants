@@ -8,5 +8,7 @@ public class NotesData : ItemData
     private void Awake()
     {
         Type = ItemType.Notes;
+
+        RequiredSpace = 0;
     }
 }
