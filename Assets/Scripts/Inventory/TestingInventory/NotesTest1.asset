@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295d7aa97c8deb7449d0b7c457b6cc39, type: 3}
+  m_Name: NotesTest1
+  m_EditorClassIdentifier: 
+  <ItemName>k__BackingField: 
+  description: 
+  <Icon>k__BackingField: {fileID: 0}
+  <CombinableItems>k__BackingField:
+  - {fileID: 11400000, guid: 0b5c7fab847b53349ab6f4a948a8e6ed, type: 2}
+  <CombinedResults>k__BackingField:
+  - {fileID: 5980017212352650490, guid: 27f57ea0ac9f5ce458a7dcb6bf0b3416, type: 3}
+  maxStack: 1
+  requiredSpace: 1
+  <Equippable>k__BackingField: 0
