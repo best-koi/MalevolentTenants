@@ -71,26 +71,25 @@ public class PlayerInventory : MonoBehaviour
 
     public bool Clear()
     {
-        Inventory.Clear();
+        foreach (InventoryItem item in Inventory)
+            RemoveItem(item);
 
         return true;
     }
 
-    public InventoryItem FindItem(ItemData data, bool maxStackSearch = true)
+    public List<InventoryItem> FindItem(ItemData data)
     {
-        InventoryItem result = null;
+        List<InventoryItem> foundItems = new List<InventoryItem>();
 
         foreach (InventoryItem item in Inventory)
         {
             if (item.Data == data)
             {
-                if (maxStackSearch && item.CurrentStack < result.CurrentStack) continue;
-
-                result = item;
+                foundItems.Add(item);
             }
         }
 
-        return null;
+        return foundItems;
     }
 
     public InventoryItem CombineItems(InventoryItem item, InventoryItem otherItem, int initialStack)
