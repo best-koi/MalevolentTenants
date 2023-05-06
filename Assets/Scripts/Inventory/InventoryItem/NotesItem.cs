@@ -6,7 +6,7 @@ public class NotesItem : InventoryItem
 {
     [SerializeField] protected NotesData data;
 
-    protected void Awake()
+    public NotesItem(ItemData data, int initialStack) : base(data, initialStack)
     {
         data = (NotesData)Data;
     }

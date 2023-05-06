@@ -6,7 +6,7 @@ public class PuzzlePieceItem : InventoryItem
 {
     [SerializeField] protected PuzzlePieceData data;
 
-    protected void Awake()
+    public PuzzlePieceItem(ItemData data, int initialStack) : base(data, initialStack)
     {
         data = (PuzzlePieceData)Data;
     }

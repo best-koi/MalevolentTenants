@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class TestItemPickup : MonoBehaviour
 {
-    [SerializeField] InventoryItem item;
+    [SerializeField] ScenePickUp item;
 
-    [SerializeField] InventoryItem otherItem;
+    [SerializeField] ScenePickUp otherItem;
 
     // Update is called once per frame
     void Update()
@@ -18,14 +18,6 @@ public class TestItemPickup : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.E) && otherItem != null)
         {
             otherItem.Interact();
-        }
-        else if (Input.GetKeyDown(KeyCode.Z) && item != null)
-        {
-            PlayerInventory.Instance.RemoveItem(item);
-        }
-        else if (Input.GetKeyDown(KeyCode.C) && otherItem != null)
-        {
-            PlayerInventory.Instance.RemoveItem(otherItem);
         }
     }
 }

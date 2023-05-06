@@ -17,8 +17,10 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 0}
   <CombinableItems>k__BackingField:
   - {fileID: 11400000, guid: 0b5c7fab847b53349ab6f4a948a8e6ed, type: 2}
+  - {fileID: 11400000, guid: b43f85546081e7944b13ec71c3f941d1, type: 2}
   <CombinedResults>k__BackingField:
-  - {fileID: 5980017212352650490, guid: 27f57ea0ac9f5ce458a7dcb6bf0b3416, type: 3}
+  - {fileID: 11400000, guid: d1e643bf9b7553f47858cc3f707a4695, type: 2}
+  - {fileID: 11400000, guid: d1e643bf9b7553f47858cc3f707a4695, type: 2}
   maxStack: 1
   requiredSpace: 1
   <Equippable>k__BackingField: 0

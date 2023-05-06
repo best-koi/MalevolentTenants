@@ -6,9 +6,9 @@ public class PlayerInventory : MonoBehaviour
 {
     public static PlayerInventory Instance { get; private set; }
 
-    [field: SerializeField] public List<InventoryItem> inventory { get; private set; }
+    [field: SerializeField] public List<InventoryItem> Inventory { get; private set; }
 
-    [SerializeField] private int maxInventorySpace = 3;
+    [SerializeField] private int maxInventorySpace;
 
     private InventoryItem equippedItem;
 
@@ -17,19 +17,20 @@ public class PlayerInventory : MonoBehaviour
         if (Instance != null) Destroy(this.gameObject);
 
         Instance = this;
+        Inventory = new List<InventoryItem>();
 
-        // DontDestroyOnLoad(this);
+        DontDestroyOnLoad(this);
     }
 
     public bool AddItem(InventoryItem newItem)
     {
         if (newItem == null) return false;
 
-        if (inventory.Contains(newItem)) return false;
+        if (Inventory.Contains(newItem)) return false;
 
         if (!ValidateSpace(newItem.Data.RequiredSpace)) return false;
 
-        foreach(InventoryItem item in inventory)
+        foreach(InventoryItem item in Inventory)
         {
             if (!ValidateItem(newItem)) return DestroyItem(newItem);
 
@@ -51,7 +52,7 @@ public class PlayerInventory : MonoBehaviour
         }
 
         newItem.OnAdded();
-        inventory.Add(newItem);
+        Inventory.Add(newItem);
 
         return true;
     }
@@ -60,35 +61,52 @@ public class PlayerInventory : MonoBehaviour
     {
         if (removedItem == null) return false;
 
-        if (!inventory.Contains(removedItem)) return false;
+        if (!Inventory.Contains(removedItem)) return false;
 
         removedItem.OnRemoved();
-        inventory.Remove(removedItem);
+        Inventory.Remove(removedItem);
 
         return true;
-    }
-
-    public GameObject CombineItems(InventoryItem item, InventoryItem otherItem)
-    {
-        if (item == null || otherItem == null) return null;
-
-        if (!inventory.Contains(item)) return null;
-        
-        if (!inventory.Contains(otherItem)) return null;
-
-        GameObject combinedResult = item.CombineWith(otherItem);
-
-        if (!ValidateItem(item)) DestroyItem(item);
-        if (!ValidateItem(otherItem)) DestroyItem(otherItem);
-
-        return combinedResult;
     }
 
     public bool Clear()
     {
-        inventory.Clear();
+        Inventory.Clear();
 
         return true;
+    }
+
+    public InventoryItem FindItem(ItemData data, bool maxStackSearch = true)
+    {
+        InventoryItem result = null;
+
+        foreach (InventoryItem item in Inventory)
+        {
+            if (item.Data == data)
+            {
+                if (maxStackSearch && item.CurrentStack < result.CurrentStack) continue;
+
+                result = item;
+            }
+        }
+
+        return null;
+    }
+
+    public InventoryItem CombineItems(InventoryItem item, InventoryItem otherItem, int initialStack)
+    {
+        if (item == null || otherItem == null) return null;
+
+        if (!Inventory.Contains(item)) return null;
+        
+        if (!Inventory.Contains(otherItem)) return null;
+
+        ItemData combinedResult = item.CombineWith(otherItem);
+
+        if (!ValidateItem(item)) DestroyItem(item);
+        if (!ValidateItem(otherItem)) DestroyItem(otherItem);
+
+        return CreateInventoryItem(combinedResult, initialStack);
     }
 
     public bool UseEquipped(GameObject[] others = null)
@@ -100,7 +118,7 @@ public class PlayerInventory : MonoBehaviour
     {
         if (item == null) return true;
 
-        if (!inventory.Contains(item)) return false;
+        if (!Inventory.Contains(item)) return false;
 
         bool result = item.Use(others);
 
@@ -117,10 +135,11 @@ public class PlayerInventory : MonoBehaviour
             return true;
         }
 
-        if (!inventory.Contains(item)) return false;
+        if (!Inventory.Contains(item)) return false;
 
         if (!item.Data.Equippable) return false;
 
+        equippedItem.OnUnequipped();
         item.OnEquipped();
         equippedItem = item;
 
@@ -138,7 +157,7 @@ public class PlayerInventory : MonoBehaviour
     {
         int availableSpace = maxInventorySpace;
 
-        foreach (InventoryItem item in inventory)
+        foreach (InventoryItem item in Inventory)
         {
             availableSpace -= item.Data.RequiredSpace;
         }
@@ -150,10 +169,31 @@ public class PlayerInventory : MonoBehaviour
     {
         if (item == null) return true;
 
-        if (inventory.Contains(item)) inventory.Remove(item);
-
-        Destroy(item.gameObject); // for saving persistent data, may change code to instead update a variable indicating the item should no longer exist
+        if (Inventory.Contains(item)) Inventory.Remove(item);
 
         return true;
+    }
+
+    public static InventoryItem CreateInventoryItem(ItemData itemData, int initialStack)
+    {
+        InventoryItem item = null;
+
+        switch (itemData.Type)
+        {
+            case ItemType.Weapon:
+                item = new WeaponItem(itemData, initialStack);
+                break;
+            case ItemType.PuzzlePiece:
+                item = new PuzzlePieceItem(itemData, initialStack);
+                break;
+            case ItemType.Consumable:
+                item = new ConsumableItem(itemData, initialStack);
+                break;
+            case ItemType.Notes:
+                item = new NotesItem(itemData, initialStack);
+                break;
+        }
+
+        return item;
     }
 }

@@ -19,7 +19,7 @@ public class ItemData : ScriptableObject
     [field: SerializeField] public Sprite Icon { get; protected set; }
 
     [field: SerializeField] public List<ItemData> CombinableItems { get; protected set; }
-    [field: SerializeField] public List<GameObject> CombinedResults { get; protected set; }
+    [field: SerializeField] public List<ItemData> CombinedResults { get; protected set; }
 
     public int MaxStack
     {
