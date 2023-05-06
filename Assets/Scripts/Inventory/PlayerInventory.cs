@@ -77,13 +77,28 @@ public class PlayerInventory : MonoBehaviour
         return true;
     }
 
-    public List<InventoryItem> FindItem(ItemData data)
+    public List<InventoryItem> FindItems(ItemData data)
     {
         List<InventoryItem> foundItems = new List<InventoryItem>();
 
         foreach (InventoryItem item in Inventory)
         {
             if (item.Data == data)
+            {
+                foundItems.Add(item);
+            }
+        }
+
+        return foundItems;
+    }
+
+    public List<InventoryItem> FindItemsByType(ItemType type)
+    {
+        List<InventoryItem> foundItems = new List<InventoryItem>();
+
+        foreach (InventoryItem item in Inventory)
+        {
+            if (item.Data.Type == type)
             {
                 foundItems.Add(item);
             }
