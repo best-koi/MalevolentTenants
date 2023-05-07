@@ -191,6 +191,8 @@ public class PlayerInventory : MonoBehaviour
 
         if (Inventory.Contains(item)) Inventory.Remove(item);
 
+        item.OnDestroyed();
+
         return true;
     }
 

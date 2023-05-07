@@ -56,6 +56,12 @@ public abstract class InventoryItem
         if (itemUnequipped != null) itemUnequipped();
     }
 
+    public event Action itemDestroyed;
+    public virtual void OnDestroyed()
+    {
+        if (itemDestroyed != null) itemDestroyed();
+    }
+
     public ItemData CombineWith(InventoryItem otherItem)
     {
         if (!Data.ValidateCombinations(otherItem.Data)) return null;
