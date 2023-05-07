@@ -14,12 +14,17 @@ public class PlayerInventory : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null) Destroy(this.gameObject);
+        if (Instance != null)
+        {
+            Destroy(gameObject);            
+        }
+        else
+        {
+            Instance = this;
+            Inventory = new List<InventoryItem>();
 
-        Instance = this;
-        Inventory = new List<InventoryItem>();
-
-        DontDestroyOnLoad(this);
+            DontDestroyOnLoad(this);
+        }
     }
 
     public bool AddItem(InventoryItem newItem)
@@ -27,8 +32,6 @@ public class PlayerInventory : MonoBehaviour
         if (newItem == null) return false;
 
         if (Inventory.Contains(newItem)) return false;
-
-        if (!ValidateSpace(newItem.Data.RequiredSpace)) return false;
 
         foreach(InventoryItem item in Inventory)
         {
@@ -51,8 +54,11 @@ public class PlayerInventory : MonoBehaviour
             }
         }
 
-        newItem.OnAdded();
-        Inventory.Add(newItem);
+        if (ValidateSpace(newItem.CurrentStack))
+        {
+            newItem.OnAdded();
+            Inventory.Add(newItem);
+        }
 
         return true;
     }

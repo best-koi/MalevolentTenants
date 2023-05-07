@@ -27,6 +27,11 @@ public class ScenePickUp : MonoBehaviour, IInteractable
 
     protected virtual void Added()
     {
-        Destroy(gameObject);
+        SceneObject so = GetComponent<SceneObject>();
+
+        if (so != null)
+            so.isActive = false;
+
+        gameObject.SetActive(so.isActive);
     }
 }
