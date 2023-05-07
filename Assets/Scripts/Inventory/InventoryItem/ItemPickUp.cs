@@ -14,6 +14,8 @@ public class ItemPickUp : SceneObject, IInteractable
 
     public bool Interact()
     {
+        if (!isActive) return false;
+
         if (createdItem == null)
         {
             createdItem = PlayerInventory.CreateInventoryItem(itemData, initialStack);
