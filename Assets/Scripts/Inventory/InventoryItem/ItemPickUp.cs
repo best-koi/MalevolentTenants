@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemPickUp : MonoBehaviour, IInteractable
+public class ItemPickUp : SceneObject, IInteractable
 {
     [SerializeField] private ItemData itemData;
 
@@ -10,15 +10,15 @@ public class ItemPickUp : MonoBehaviour, IInteractable
 
     private InventoryItem createdItem;
 
-    private void Awake()
-    {
-
-    }
+    private bool isActive = true;
 
     public bool Interact()
     {
-        createdItem = PlayerInventory.CreateInventoryItem(itemData, initialStack);
-        createdItem.itemAdded += Added;
+        if (createdItem == null)
+        {
+            createdItem = PlayerInventory.CreateInventoryItem(itemData, initialStack);
+            createdItem.itemAdded += Added;
+        }
 
         PlayerInventory.Instance.AddItem(createdItem);
 
@@ -27,11 +27,31 @@ public class ItemPickUp : MonoBehaviour, IInteractable
 
     protected virtual void Added()
     {
-        SceneObject so = GetComponent<SceneObject>();
+        isActive = false;
 
-        if (so != null)
-            so.isActive = false;
+        gameObject.SetActive(isActive);
+    }
 
-        gameObject.SetActive(so.isActive);
+    public override SceneObjectData Save()
+    {
+        List<string> data = new List<string>();
+        
+        data.Add(createdItem != null ? createdItem.CurrentStack.ToString() : string.Empty);
+        data.Add(isActive ? "1" : "0");
+
+        return new SceneObjectData(data.ToArray());
+    }
+
+    public override void Load(SceneObjectData SOData)
+    {
+        if (SOData.data[0] != string.Empty)
+        {
+            createdItem = PlayerInventory.CreateInventoryItem(itemData, int.Parse(SOData.data[0]));
+            createdItem.itemAdded += Added;
+        }
+
+        isActive = SOData.data[1] == "1" ? true : false;
+
+        gameObject.SetActive(isActive);
     }
 }

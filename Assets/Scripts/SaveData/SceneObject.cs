@@ -2,30 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneObject : MonoBehaviour
+public abstract class SceneObject : MonoBehaviour
 {
-    public bool isActive = true;
+    public abstract SceneObjectData Save();
 
-    public SceneObjectData Save()
-    {
-        return new SceneObjectData(isActive);
-    }
-
-    public void Load(SceneObjectData data)
-    {
-        isActive = data.isActive;
-
-        gameObject.SetActive(isActive);
-    }
+    public abstract void Load(SceneObjectData SOData);
 }
 
 [System.Serializable]
 public class SceneObjectData
 {
-    public bool isActive;
+    public string[] data;
 
-    public SceneObjectData(bool isActive)
+    public SceneObjectData(string[] data)
     {
-        this.isActive = isActive;
+        this.data = data;
     }
 }
