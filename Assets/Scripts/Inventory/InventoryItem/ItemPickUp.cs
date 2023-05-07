@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScenePickUp : MonoBehaviour, IInteractable
+public class ItemPickUp : MonoBehaviour, IInteractable
 {
     [SerializeField] private ItemData itemData;
 

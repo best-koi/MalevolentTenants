@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class TestItemPickup : MonoBehaviour
 {
-    [SerializeField] ScenePickUp item;
+    [SerializeField] ItemPickUp item;
 
-    [SerializeField] ScenePickUp otherItem;
+    [SerializeField] ItemPickUp otherItem;
 
     // Update is called once per frame
     void Update()
