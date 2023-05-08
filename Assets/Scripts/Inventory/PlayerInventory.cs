@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInventory : MonoBehaviour
+public class PlayerInventory : PersistentObject
 {
     public static PlayerInventory Instance { get; private set; }
 
-    [field: SerializeField] public List<InventoryItem> Inventory { get; private set; }
+    [SerializeField] private ItemDataReferences references;
+
+    [field: SerializeField] public List<InventoryItem> Inventory { get; private set; } = new List<InventoryItem>();
 
     [SerializeField] private int maxInventorySpace;
 
@@ -16,12 +18,11 @@ public class PlayerInventory : MonoBehaviour
     {
         if (Instance != null)
         {
-            Destroy(gameObject);            
+            Destroy(gameObject);
         }
         else
         {
             Instance = this;
-            Inventory = new List<InventoryItem>();
 
             DontDestroyOnLoad(this);
         }
@@ -194,6 +195,48 @@ public class PlayerInventory : MonoBehaviour
         item.OnDestroyed();
 
         return true;
+    }
+
+    public override PersistentObjectData Save()
+    {
+        List<string> data = new List<string>();
+
+        data.Add(maxInventorySpace.ToString());
+        data.Add(
+            equippedItem != null ?
+            references.GetIndex(equippedItem.Data).ToString() + "|" + equippedItem.CurrentStack.ToString() :
+            string.Empty);
+
+        foreach (InventoryItem item in Inventory)
+        {
+            data.Add(references.GetIndex(item.Data).ToString() + "|" + item.CurrentStack.ToString());
+        }
+
+        return new PersistentObjectData(data.ToArray());
+    }
+
+    public override void Load(PersistentObjectData POData)
+    {
+        maxInventorySpace = int.Parse(POData.data[0]);
+
+        string[] parsedData;
+
+        if (POData.data[1] != string.Empty)
+        {
+            parsedData = POData.data[1].Split("|");
+
+            InventoryItem equipped = CreateInventoryItem(references.GetItemData(int.Parse(parsedData[0])), int.Parse(parsedData[1]));
+            AddItem(equipped);
+            equippedItem = equipped;
+        }
+
+        for (int i = 2; i > POData.data.Length; i++)
+        {
+            parsedData = POData.data[i].Split("|");
+
+            InventoryItem item = CreateInventoryItem(references.GetItemData(int.Parse(parsedData[0])), int.Parse(parsedData[1]));
+            AddItem(item);
+        }
     }
 
     public static InventoryItem CreateInventoryItem(ItemData itemData, int initialStack)
