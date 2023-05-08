@@ -29,6 +29,8 @@ public class ItemPickUp : PersistentObject, IInteractable
 
     protected virtual void Added()
     {
+        createdItem.itemAdded -= Added;
+
         isActive = false;
 
         gameObject.SetActive(isActive);
