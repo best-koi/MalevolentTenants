@@ -9,15 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cc25ea1896954340b3c743e2b2df354, type: 3}
-  m_Name: WeaponTest
+  m_Script: {fileID: 11500000, guid: 295d7aa97c8deb7449d0b7c457b6cc39, type: 3}
+  m_Name: HelpNotes
   m_EditorClassIdentifier: 
-  <ItemName>k__BackingField: 
+  <ItemName>k__BackingField: Help Notes
   description: 
   <Icon>k__BackingField: {fileID: 0}
   <CombinableItems>k__BackingField: []
   <CombinedResults>k__BackingField: []
   maxStack: 1
-  requiredSpace: 1
+  requiredSpace: 0
   <Equippable>k__BackingField: 0
-  <damage>k__BackingField: 0

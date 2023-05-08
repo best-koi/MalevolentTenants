@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7bfb7c38f10af394f8bd9d6a6e98bf21, type: 3}
-  m_Name: ConsumableTest
+  m_Name: Bandages
   m_EditorClassIdentifier: 
-  <ItemName>k__BackingField: 
+  <ItemName>k__BackingField: Bandages
   description: 
   <Icon>k__BackingField: {fileID: 0}
   <CombinableItems>k__BackingField: []
   <CombinedResults>k__BackingField: []
-  maxStack: 1
+  maxStack: 5
   requiredSpace: 1
   <Equippable>k__BackingField: 0

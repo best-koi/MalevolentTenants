@@ -7,8 +7,11 @@ public class WeaponData : ItemData
 {
     [field: SerializeField] public float damage { get; protected set; }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         Type = ItemType.Weapon;
+        Equippable = true;
     }
 }

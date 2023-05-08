@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1281276518660843881}
   - component: {fileID: 835381308250246354}
   m_Layer: 0
-  m_Name: TestItem
+  m_Name: PickUpItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

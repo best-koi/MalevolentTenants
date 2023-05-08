@@ -10,16 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2cc25ea1896954340b3c743e2b2df354, type: 3}
-  m_Name: StackTestItem
+  m_Name: Knife
   m_EditorClassIdentifier: 
-  <ItemName>k__BackingField: 
+  <ItemName>k__BackingField: Knife
   description: 
   <Icon>k__BackingField: {fileID: 0}
-  <CombinableItems>k__BackingField:
-  - {fileID: 11400000, guid: 8b1da8b5dd796474aa9abf801d2233e0, type: 2}
-  <CombinedResults>k__BackingField:
-  - {fileID: 11400000, guid: d1e643bf9b7553f47858cc3f707a4695, type: 2}
-  maxStack: 3
+  <CombinableItems>k__BackingField: []
+  <CombinedResults>k__BackingField: []
+  maxStack: 1
   requiredSpace: 1
-  <Equippable>k__BackingField: 0
+  <Equippable>k__BackingField: 1
   <damage>k__BackingField: 0

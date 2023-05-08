@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemData : ScriptableObject
 {
+    public string ItemID { get; private set; }
+
     [field: SerializeField] public string ItemName { get; protected set; }
 
     public string Description 
@@ -51,6 +54,11 @@ public class ItemData : ScriptableObject
         if (CombinableItems.Count != distinctOthers.Count) return false;
 
         return true;
+    }
+
+    protected virtual void Awake()
+    {
+        ItemID = Guid.NewGuid().ToString();
     }
 }
 

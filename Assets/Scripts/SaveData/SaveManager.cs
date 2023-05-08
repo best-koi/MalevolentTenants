@@ -24,17 +24,11 @@ public class SaveManager : MonoBehaviour
         directory = "/SaveData/";
         inventoryFileName = "InventorySaveData.txt";
         sceneFileName = string.Format("{0}SceneSaveData.txt", SceneManager.GetActiveScene().name);
-
-        Load();
     }
 
-    private void Update()
+    private void Start()
     {
-        // TO DO: For testing only; delete this once adding everything together
-        if (Input.GetMouseButtonDown(0))
-            SceneManager.LoadScene(0);
-        else if (Input.GetMouseButtonDown(1))
-            SceneManager.LoadScene(1);
+        Load();
     }
 
     private void Save(Scene current)

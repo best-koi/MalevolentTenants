@@ -5,8 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New NotesData", menuName = "ItemData/NotesData")]
 public class NotesData : ItemData
 {
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         Type = ItemType.Notes;
 
         RequiredSpace = 0;

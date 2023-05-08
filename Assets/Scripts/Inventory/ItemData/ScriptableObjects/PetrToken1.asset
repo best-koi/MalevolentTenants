@@ -10,15 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5000e8a7dbc30f04984af48014e8f98d, type: 3}
-  m_Name: PuzzleTest1
+  m_Name: PetrToken1
   m_EditorClassIdentifier: 
-  <ItemName>k__BackingField: Puzzle 1
+  <ItemName>k__BackingField: First Petr Token
   description: 
   <Icon>k__BackingField: {fileID: 0}
-  <CombinableItems>k__BackingField:
-  - {fileID: 11400000, guid: 8b1da8b5dd796474aa9abf801d2233e0, type: 2}
-  <CombinedResults>k__BackingField:
-  - {fileID: 11400000, guid: d1e643bf9b7553f47858cc3f707a4695, type: 2}
+  <CombinableItems>k__BackingField: []
+  <CombinedResults>k__BackingField: []
   maxStack: 1
-  requiredSpace: 3
+  requiredSpace: 1
   <Equippable>k__BackingField: 0

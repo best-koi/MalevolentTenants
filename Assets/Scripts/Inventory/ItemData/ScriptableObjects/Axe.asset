@@ -9,14 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bfb7c38f10af394f8bd9d6a6e98bf21, type: 3}
-  m_Name: ConsumableTest1
+  m_Script: {fileID: 11500000, guid: 2cc25ea1896954340b3c743e2b2df354, type: 3}
+  m_Name: Axe
   m_EditorClassIdentifier: 
-  <ItemName>k__BackingField: 
+  <ItemName>k__BackingField: Axe
   description: 
   <Icon>k__BackingField: {fileID: 0}
   <CombinableItems>k__BackingField: []
   <CombinedResults>k__BackingField: []
   maxStack: 1
   requiredSpace: 1
-  <Equippable>k__BackingField: 0
+  <Equippable>k__BackingField: 1
+  <damage>k__BackingField: 0

@@ -6,7 +6,7 @@ public class PlayerInventory : PersistentObject
 {
     public static PlayerInventory Instance { get; private set; }
 
-    [SerializeField] private ItemDataReferences references;
+    [SerializeField] private List<ItemData> references;
 
     [field: SerializeField] public List<InventoryItem> Inventory { get; private set; } = new List<InventoryItem>();
 
@@ -23,6 +23,8 @@ public class PlayerInventory : PersistentObject
         else
         {
             Instance = this;
+
+            references = ScriptableObjectUtilities.FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Scripts/Inventory/ItemData/ScriptableObjects");
 
             DontDestroyOnLoad(this);
         }
@@ -204,12 +206,12 @@ public class PlayerInventory : PersistentObject
         data.Add(maxInventorySpace.ToString());
         data.Add(
             equippedItem != null ?
-            references.GetIndex(equippedItem.Data).ToString() + "|" + equippedItem.CurrentStack.ToString() :
+            equippedItem.Data.ItemID + "|" + equippedItem.CurrentStack.ToString() :
             string.Empty);
 
         foreach (InventoryItem item in Inventory)
         {
-            data.Add(references.GetIndex(item.Data).ToString() + "|" + item.CurrentStack.ToString());
+            data.Add(item.Data.ItemID + "|" + item.CurrentStack.ToString());
         }
 
         return new PersistentObjectData(data.ToArray());
@@ -225,7 +227,7 @@ public class PlayerInventory : PersistentObject
         {
             parsedData = POData.data[1].Split("|");
 
-            InventoryItem equipped = CreateInventoryItem(references.GetItemData(int.Parse(parsedData[0])), int.Parse(parsedData[1]));
+            InventoryItem equipped = CreateInventoryItem(LoadItemFromID(parsedData[0]), int.Parse(parsedData[1]));
             AddItem(equipped);
             equippedItem = equipped;
         }
@@ -234,9 +236,17 @@ public class PlayerInventory : PersistentObject
         {
             parsedData = POData.data[i].Split("|");
 
-            InventoryItem item = CreateInventoryItem(references.GetItemData(int.Parse(parsedData[0])), int.Parse(parsedData[1]));
+            InventoryItem item = CreateInventoryItem(LoadItemFromID(parsedData[0]), int.Parse(parsedData[1]));
             AddItem(item);
         }
+    }
+
+    private ItemData LoadItemFromID(string ID)
+    {
+        foreach (ItemData item in references)
+            if (item.ItemID == ID) return item;
+
+        return null;
     }
 
     public static InventoryItem CreateInventoryItem(ItemData itemData, int initialStack)
