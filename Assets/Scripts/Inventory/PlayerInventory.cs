@@ -162,7 +162,7 @@ public class PlayerInventory : PersistentObject
 
         if (!item.Data.Equippable) return false;
 
-        equippedItem.OnUnequipped();
+        if (equippedItem != null) equippedItem.OnUnequipped();
         item.OnEquipped();
         equippedItem = item;
 
@@ -221,16 +221,8 @@ public class PlayerInventory : PersistentObject
     {
         maxInventorySpace = int.Parse(POData.data[0]);
 
+        string[] equippedParsedData = POData.data[1] != string.Empty ? POData.data[1].Split("|") : null;
         string[] parsedData;
-
-        if (POData.data[1] != string.Empty)
-        {
-            parsedData = POData.data[1].Split("|");
-
-            InventoryItem equipped = CreateInventoryItem(LoadItemFromID(parsedData[0]), int.Parse(parsedData[1]));
-            AddItem(equipped);
-            equippedItem = equipped;
-        }
 
         for (int i = 2; i > POData.data.Length; i++)
         {
@@ -238,6 +230,10 @@ public class PlayerInventory : PersistentObject
 
             InventoryItem item = CreateInventoryItem(LoadItemFromID(parsedData[0]), int.Parse(parsedData[1]));
             AddItem(item);
+
+            if (equippedParsedData == null) continue;
+
+            if (equippedParsedData[0] == parsedData[0] && equippedParsedData[1] == parsedData[1]) equippedItem = item;
         }
     }
 

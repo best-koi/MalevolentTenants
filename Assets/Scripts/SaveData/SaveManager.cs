@@ -49,6 +49,8 @@ public class SaveManager : MonoBehaviour
 
         json = JsonUtility.ToJson(new SceneData(persistentObjData), true);
         File.WriteAllText(dir + sceneFileName, json);
+
+        SceneManager.sceneUnloaded -= Save;
     }
 
     private void SaveInventory(SceneData current)
