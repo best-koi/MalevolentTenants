@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class ItemData : ScriptableObject
 {
-    public string ItemID { get; private set; }
-
     [field: SerializeField] public string ItemName { get; protected set; }
 
     public string Description 
@@ -58,7 +56,7 @@ public class ItemData : ScriptableObject
 
     protected virtual void Awake()
     {
-        ItemID = Guid.NewGuid().ToString();
+
     }
 }
 

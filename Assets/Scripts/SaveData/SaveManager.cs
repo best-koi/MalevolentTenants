@@ -53,11 +53,6 @@ public class SaveManager : MonoBehaviour
         SceneManager.sceneUnloaded -= Save;
     }
 
-    private void SaveInventory(SceneData current)
-    {
-
-    }
-
     private void Load()
     {
         string fullPath = Application.persistentDataPath + directory + inventoryFileName;

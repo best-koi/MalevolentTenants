@@ -206,12 +206,12 @@ public class PlayerInventory : PersistentObject
         data.Add(maxInventorySpace.ToString());
         data.Add(
             equippedItem != null ?
-            equippedItem.Data.ItemID + "|" + equippedItem.CurrentStack.ToString() :
+            equippedItem.Data.ItemName + "|" + equippedItem.CurrentStack.ToString() :
             string.Empty);
 
         foreach (InventoryItem item in Inventory)
         {
-            data.Add(item.Data.ItemID + "|" + item.CurrentStack.ToString());
+            data.Add(item.Data.ItemName + "|" + item.CurrentStack.ToString());
         }
 
         return new PersistentObjectData(data.ToArray());
@@ -228,7 +228,7 @@ public class PlayerInventory : PersistentObject
         {
             parsedData = POData.data[i].Split("|");
 
-            InventoryItem item = CreateInventoryItem(LoadItemFromID(parsedData[0]), int.Parse(parsedData[1]));
+            InventoryItem item = CreateInventoryItem(LoadItemFromName(parsedData[0]), int.Parse(parsedData[1]));
             AddItem(item);
 
             if (equippedParsedData == null) continue;
@@ -237,10 +237,10 @@ public class PlayerInventory : PersistentObject
         }
     }
 
-    private ItemData LoadItemFromID(string ID)
+    private ItemData LoadItemFromName(string name)
     {
         foreach (ItemData item in references)
-            if (item.ItemID == ID) return item;
+            if (item.ItemName == name) return item;
 
         return null;
     }
