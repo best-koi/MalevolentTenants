@@ -7,7 +7,7 @@ public class ConsumableItem : InventoryItem
 {
     [SerializeField] protected ConsumableData data;
 
-    public ConsumableItem(ItemData data, int initialStack) : base(data, initialStack)
+    public ConsumableItem(ItemData data, int initialStack, string instanceID) : base(data, initialStack, instanceID)
     {
         data = (ConsumableData)Data;
     }

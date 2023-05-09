@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class PlayerInventory : PersistentObject
 {
     public static PlayerInventory Instance { get; private set; }
 
-    [SerializeField] private List<ItemData> references;
+    [SerializeField] private Dictionary<string, ItemData> references;
 
     [field: SerializeField] public List<InventoryItem> Inventory { get; private set; } = new List<InventoryItem>();
 
@@ -24,7 +25,12 @@ public class PlayerInventory : PersistentObject
         {
             Instance = this;
 
-            references = ScriptableObjectUtilities.FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Scripts/Inventory/ItemData/ScriptableObjects");
+            references = new Dictionary<string, ItemData>();
+
+            string[] itemDataGUIDs = AssetDatabase.FindAssets("t:ItemData", new[] { "Assets/Scripts/Inventory/ItemData/ScriptableObjects" });
+
+            foreach (string GUID in itemDataGUIDs)
+                references.Add(GUID, AssetDatabase.LoadAssetAtPath<ItemData>(AssetDatabase.GUIDToAssetPath(GUID)));
 
             DontDestroyOnLoad(this);
         }
@@ -129,7 +135,7 @@ public class PlayerInventory : PersistentObject
         if (!ValidateItem(item)) DestroyItem(item);
         if (!ValidateItem(otherItem)) DestroyItem(otherItem);
 
-        return CreateInventoryItem(combinedResult, initialStack);
+        return CreateInventoryItem(combinedResult, initialStack, string.Empty);
     }
 
     public bool UseEquipped(GameObject[] others = null)
@@ -154,6 +160,7 @@ public class PlayerInventory : PersistentObject
     {
         if (item == null)
         {
+            if (equippedItem != null) equippedItem.OnUnequipped();
             equippedItem = null;
             return true;
         }
@@ -206,12 +213,12 @@ public class PlayerInventory : PersistentObject
         data.Add(maxInventorySpace.ToString());
         data.Add(
             equippedItem != null ?
-            equippedItem.Data.ItemName + "|" + equippedItem.CurrentStack.ToString() :
+            ItemDataToGUID(equippedItem.Data) + "|" + equippedItem.CurrentStack.ToString() + "|" + equippedItem.InstanceID :
             string.Empty);
 
         foreach (InventoryItem item in Inventory)
         {
-            data.Add(item.Data.ItemName + "|" + item.CurrentStack.ToString());
+            data.Add(ItemDataToGUID(item.Data) + "|" + item.CurrentStack.ToString() + "|" + item.InstanceID);
         }
 
         return new PersistentObjectData(data.ToArray());
@@ -228,7 +235,7 @@ public class PlayerInventory : PersistentObject
         {
             parsedData = POData.data[i].Split("|");
 
-            InventoryItem item = CreateInventoryItem(LoadItemFromName(parsedData[0]), int.Parse(parsedData[1]));
+            InventoryItem item = CreateInventoryItem(GUIDToItemData(parsedData[0]), int.Parse(parsedData[1]), parsedData[2]);
             AddItem(item);
 
             if (equippedParsedData == null) continue;
@@ -237,31 +244,36 @@ public class PlayerInventory : PersistentObject
         }
     }
 
-    private ItemData LoadItemFromName(string name)
+    private string ItemDataToGUID(ItemData data)
     {
-        foreach (ItemData item in references)
-            if (item.ItemName == name) return item;
+        foreach (var pair in references)
+            if (pair.Value == data) return pair.Key;
 
-        return null;
+        return string.Empty;
     }
 
-    public static InventoryItem CreateInventoryItem(ItemData itemData, int initialStack)
+    private ItemData GUIDToItemData(string GUID)
+    {
+        return references.ContainsKey(GUID) ? references[GUID] : null;
+    }
+
+    public static InventoryItem CreateInventoryItem(ItemData itemData, int initialStack, string instanceID)
     {
         InventoryItem item = null;
 
         switch (itemData.Type)
         {
             case ItemType.Weapon:
-                item = new WeaponItem(itemData, initialStack);
+                item = new WeaponItem(itemData, initialStack, instanceID);
                 break;
             case ItemType.PuzzlePiece:
-                item = new PuzzlePieceItem(itemData, initialStack);
+                item = new PuzzlePieceItem(itemData, initialStack, instanceID);
                 break;
             case ItemType.Consumable:
-                item = new ConsumableItem(itemData, initialStack);
+                item = new ConsumableItem(itemData, initialStack, instanceID);
                 break;
             case ItemType.Notes:
-                item = new NotesItem(itemData, initialStack);
+                item = new NotesItem(itemData, initialStack, instanceID);
                 break;
         }
 

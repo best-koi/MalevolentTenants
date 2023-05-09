@@ -18,7 +18,7 @@ public class ItemPickUp : PersistentObject, IInteractable
 
         if (createdItem == null)
         {
-            createdItem = PlayerInventory.CreateInventoryItem(itemData, initialStack);
+            createdItem = PlayerInventory.CreateInventoryItem(itemData, initialStack, string.Empty);
             createdItem.itemAdded += Added;
         }
 
@@ -42,6 +42,7 @@ public class ItemPickUp : PersistentObject, IInteractable
         
         data.Add(createdItem != null ? createdItem.CurrentStack.ToString() : string.Empty);
         data.Add(isActive ? "1" : "0");
+        data.Add(createdItem != null ? createdItem.InstanceID : string.Empty);
 
         return new PersistentObjectData(data.ToArray());
     }
@@ -50,7 +51,8 @@ public class ItemPickUp : PersistentObject, IInteractable
     {
         if (POData.data[0] != string.Empty)
         {
-            createdItem = PlayerInventory.CreateInventoryItem(itemData, int.Parse(POData.data[0]));
+            InventoryItem item = InventoryItem.FindItemByID(POData.data[2]);
+            createdItem = item != null ? item : PlayerInventory.CreateInventoryItem(itemData, int.Parse(POData.data[0]), POData.data[2]);
             createdItem.itemAdded += Added;
         }
 

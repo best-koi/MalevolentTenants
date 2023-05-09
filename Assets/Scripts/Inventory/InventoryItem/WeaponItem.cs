@@ -7,7 +7,7 @@ public class WeaponItem : InventoryItem
 {
     [SerializeField] protected WeaponData data;
 
-    public WeaponItem(ItemData data, int initialStack) : base(data, initialStack)
+    public WeaponItem(ItemData data, int initialStack, string instanceID) : base(data, initialStack, instanceID)
     {
         data = (WeaponData)Data;
     }

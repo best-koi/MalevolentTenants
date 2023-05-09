@@ -8,6 +8,8 @@ public abstract class InventoryItem
 {
     [field: SerializeField] public ItemData Data { get; private set; }
 
+    [field: SerializeField] public string InstanceID { get; private set; }
+
     public int CurrentStack
     {
         get { return currentStack; }
@@ -15,11 +17,17 @@ public abstract class InventoryItem
     }
     [SerializeField] private int currentStack = 1;
 
-    public InventoryItem(ItemData data, int initialStack)
+    static List<InventoryItem> allInventoryItemInstances = new List<InventoryItem>();
+
+    public InventoryItem(ItemData data, int initialStack, string instanceID)
     {
         Data = data;
 
-        this.currentStack = initialStack;
+        CurrentStack = initialStack;
+
+        InstanceID = instanceID != string.Empty ? instanceID : Guid.NewGuid().ToString();
+
+        allInventoryItemInstances.Add(this);
     }
 
     public abstract bool Use(GameObject[] objs = null);
@@ -77,5 +85,13 @@ public abstract class InventoryItem
         if (CurrentStack <= 0) return false;
 
         return true;
+    }
+
+    public static InventoryItem FindItemByID(string instanceID)
+    {
+        foreach (InventoryItem item in allInventoryItemInstances)
+            if (item.InstanceID == instanceID) return item;
+
+        return null;
     }
 }
