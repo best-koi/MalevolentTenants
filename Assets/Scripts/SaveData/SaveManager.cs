@@ -9,20 +9,16 @@ public class SaveManager : MonoBehaviour
 {
     [SerializeField] private List<PersistentObject> persistentSceneObjects = new List<PersistentObject>();
 
-    private string directory;
+    private string directory = "/SaveData/";
 
-    private string inventoryFileName;
+    private string inventoryFileName = "InventorySaveData.txt";
 
     private string sceneFileName;
 
     private void Awake()
     {
-        EditorApplication.playModeStateChanged += DeleteSave;
-
         SceneManager.sceneUnloaded += Save;
 
-        directory = "/SaveData/";
-        inventoryFileName = "InventorySaveData.txt";
         sceneFileName = string.Format("{0}SceneSaveData.txt", SceneManager.GetActiveScene().name);
     }
 
@@ -82,10 +78,8 @@ public class SaveManager : MonoBehaviour
             Debug.LogFormat("SaveManager.Load: Save file does not exist");
     }
 
-    private void DeleteSave(PlayModeStateChange state)
+    private void DeleteSave()
     {
-        if (state != PlayModeStateChange.ExitingPlayMode) return;
-
         DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + directory);
 
         if (dir == null) return;
@@ -94,6 +88,11 @@ public class SaveManager : MonoBehaviour
         {
             file.Delete();
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        DeleteSave();
     }
 }
 

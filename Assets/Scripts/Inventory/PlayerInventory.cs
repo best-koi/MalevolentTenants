@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 public class PlayerInventory : PersistentObject
 {
     public static PlayerInventory Instance { get; private set; }
 
-    [SerializeField] private Dictionary<string, ItemData> references;
+    private Dictionary<string, ItemData> itemDataReferences = new Dictionary<string, ItemData>();
+    private Dictionary<ItemData, string> itemNameReferences = new Dictionary<ItemData, string>();
 
     [field: SerializeField] public List<InventoryItem> Inventory { get; private set; } = new List<InventoryItem>();
 
@@ -25,12 +25,11 @@ public class PlayerInventory : PersistentObject
         {
             Instance = this;
 
-            references = new Dictionary<string, ItemData>();
-
-            string[] itemDataGUIDs = AssetDatabase.FindAssets("t:ItemData", new[] { "Assets/Scripts/Inventory/ItemData/ScriptableObjects" });
-
-            foreach (string GUID in itemDataGUIDs)
-                references.Add(GUID, AssetDatabase.LoadAssetAtPath<ItemData>(AssetDatabase.GUIDToAssetPath(GUID)));
+            foreach (ItemData itemData in Resources.LoadAll("ItemDataScriptableObjects", typeof(ItemData)))
+            {
+                itemDataReferences.Add(itemData.ItemName, itemData);
+                itemNameReferences.Add(itemData, itemData.ItemName);
+            }
 
             DontDestroyOnLoad(this);
         }
@@ -213,12 +212,12 @@ public class PlayerInventory : PersistentObject
         data.Add(maxInventorySpace.ToString());
         data.Add(
             equippedItem != null ?
-            ItemDataToGUID(equippedItem.Data) + "|" + equippedItem.CurrentStack.ToString() + "|" + equippedItem.InstanceID :
+            ItemDataToString(equippedItem.Data) + "|" + equippedItem.CurrentStack.ToString() + "|" + equippedItem.InstanceID :
             string.Empty);
 
         foreach (InventoryItem item in Inventory)
         {
-            data.Add(ItemDataToGUID(item.Data) + "|" + item.CurrentStack.ToString() + "|" + item.InstanceID);
+            data.Add(ItemDataToString(item.Data) + "|" + item.CurrentStack.ToString() + "|" + item.InstanceID);
         }
 
         return new PersistentObjectData(data.ToArray());
@@ -235,7 +234,7 @@ public class PlayerInventory : PersistentObject
         {
             parsedData = POData.data[i].Split("|");
 
-            InventoryItem item = CreateInventoryItem(GUIDToItemData(parsedData[0]), int.Parse(parsedData[1]), parsedData[2]);
+            InventoryItem item = CreateInventoryItem(StringToItemData(parsedData[0]), int.Parse(parsedData[1]), parsedData[2]);
             AddItem(item);
 
             if (equippedParsedData == null) continue;
@@ -244,17 +243,14 @@ public class PlayerInventory : PersistentObject
         }
     }
 
-    private string ItemDataToGUID(ItemData data)
+    private string ItemDataToString(ItemData data)
     {
-        foreach (var pair in references)
-            if (pair.Value == data) return pair.Key;
-
-        return string.Empty;
+        return itemNameReferences.ContainsKey(data) ? itemNameReferences[data] : string.Empty;
     }
 
-    private ItemData GUIDToItemData(string GUID)
+    private ItemData StringToItemData(string name)
     {
-        return references.ContainsKey(GUID) ? references[GUID] : null;
+        return itemDataReferences.ContainsKey(name) ? itemDataReferences[name] : null;
     }
 
     public static InventoryItem CreateInventoryItem(ItemData itemData, int initialStack, string instanceID)
