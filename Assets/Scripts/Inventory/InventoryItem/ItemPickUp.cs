@@ -2,17 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Defunct code; use PickableItems instead 
 public class ItemPickUp : PersistentObject, IInteractable
 {
     [SerializeField] private ItemData itemData;
 
     [SerializeField] private int initialStack = 1;
 
+    [SerializeField] private string text = "(E) Pick Up";
+    
+    public string interactionText => text;
+
     private InventoryItem createdItem;
 
     private bool isActive = true;
 
-    public bool Interact()
+    public bool Interact(Interactor interactor)
     {
         if (!isActive) return false;
 
