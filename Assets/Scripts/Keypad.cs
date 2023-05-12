@@ -5,12 +5,20 @@ using UnityEngine.UI;
 
 public class Keypad : MonoBehaviour
 {
-    [SerializeField] private Text Ans;
+    [SerializeField] 
+    private Text Ans;
 
-    private string Answer = "123456";
+    private Text Reset;
+
+    [SerializeField]
+    private string Answer;
 
     public void Number(int number)
     {
+        if(Ans.text == "Correct" || Ans.text == "Wrong")
+        {
+            Ans.text = "";
+        }
         Ans.text += number.ToString();
     }
 
