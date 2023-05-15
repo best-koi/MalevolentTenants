@@ -17,6 +17,11 @@ public class ItemPickUp : PersistentObject, IInteractable
 
     private bool isActive = true;
 
+    public void Start()
+    {
+        PlayerInventory.Instance.itemAddedEvent += Added;
+    }
+
     public bool Interact(Interactor interactor)
     {
         if (!isActive) return false;
@@ -24,7 +29,6 @@ public class ItemPickUp : PersistentObject, IInteractable
         if (createdItem == null)
         {
             createdItem = PlayerInventory.CreateInventoryItem(itemData, initialStack, string.Empty);
-            PlayerInventory.Instance.itemAddedEvent += Added;
         }
 
         PlayerInventory.Instance.AddItem(createdItem);
@@ -47,7 +51,7 @@ public class ItemPickUp : PersistentObject, IInteractable
     {
         List<string> data = new List<string>();
         
-        data.Add(createdItem != null ? createdItem.CurrentStack.ToString() : string.Empty);
+        data.Add(createdItem != null ? createdItem.CurrentStack.ToString() : initialStack.ToString());
         data.Add(isActive ? "1" : "0");
         data.Add(createdItem != null ? createdItem.InstanceID : string.Empty);
 
@@ -56,14 +60,14 @@ public class ItemPickUp : PersistentObject, IInteractable
 
     public override void Load(PersistentObjectData POData)
     {
-        if (POData.data[0] != string.Empty)
-        {
-            InventoryItem item = InventoryItem.FindItemByID(POData.data[2]);
-            createdItem = item != null ? item : PlayerInventory.CreateInventoryItem(itemData, int.Parse(POData.data[0]), POData.data[2]);
-            PlayerInventory.Instance.itemAddedEvent += Added;
-        }
-
         isActive = POData.data[1] == "1" ? true : false;
+
+        if (isActive)
+        {
+            string itemID = POData.data[2];
+            initialStack = int.Parse(POData.data[0]);
+            createdItem = InventoryItem.FindItemByID(itemID);
+        }
 
         gameObject.SetActive(isActive);
     }

@@ -46,7 +46,12 @@ public class PlayerInventory : PersistentObject
 
         foreach(InventoryItem item in Inventory)
         {
-            if (!ValidateItem(newItem)) return DestroyItem(newItem);
+            if (!ValidateItem(newItem))
+            {
+                if (itemAddedEvent != null) itemAddedEvent(newItem);
+
+                return DestroyItem(newItem);
+            }
 
             if (item.Data != newItem.Data) continue;
 
