@@ -36,7 +36,7 @@ public class ItemData : ScriptableObject
     }
     [SerializeField] private int requiredSpace = 1;
 
-    [field: SerializeField] public bool Equippable { get; protected set; }
+    [field: SerializeField] public bool Equippable { get; protected set; } = false;
 
     public bool ValidateCombinations(ItemData other)
     {

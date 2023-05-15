@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -97,32 +98,12 @@ public class PlayerInventory : PersistentObject
 
     public List<InventoryItem> FindItems(ItemData data)
     {
-        List<InventoryItem> foundItems = new List<InventoryItem>();
-
-        foreach (InventoryItem item in Inventory)
-        {
-            if (item.Data == data)
-            {
-                foundItems.Add(item);
-            }
-        }
-
-        return foundItems;
+        return Inventory.Where(item => item.Data == data).ToList();
     }
 
     public List<InventoryItem> FindItemsByType(ItemType type)
     {
-        List<InventoryItem> foundItems = new List<InventoryItem>();
-
-        foreach (InventoryItem item in Inventory)
-        {
-            if (item.Data.Type == type)
-            {
-                foundItems.Add(item);
-            }
-        }
-
-        return foundItems;
+        return Inventory.Where(item => item.Data.Type == type).ToList();
     }
 
     public event Action<InventoryItem, InventoryItem> itemCombinedEvent;
