@@ -10,18 +10,14 @@ public class Interactor : MonoBehaviour
     [SerializeField] private int numFound;
     [SerializeField] private TextInteraction textinteraction;
     private IInteractable interactableItem;
-    private ReadInteraction readnotes;
     private Collider[] colliders=new Collider[3]; //If overlap, only three items can interact
     private void Update() {
         numFound= Physics.OverlapSphereNonAlloc(interactionPoint.position, interactionRadius, colliders, InteractableLayer);
         if(numFound>0){
             interactableItem = colliders[0].GetComponent<IInteractable>();
-            readnotes=colliders[0].GetComponent<ReadInteraction>();
             if(interactableItem!=null){
                 if(!textinteraction.IsDisplayed) textinteraction.SetUp(interactableItem.interactionText);
-                if(Input.GetKeyDown(KeyCode.E)){
-                    interactableItem.Interact(this);
-                }
+                if(Input.GetKeyDown(KeyCode.E))interactableItem.Interact(this);
             }
         }else{
             if(interactableItem!=null) interactableItem=null;

@@ -12,10 +12,10 @@ public class TextInteraction : MonoBehaviour
         uiPanel.SetActive(false);
     }
     private void Update() {
+        //Let the text rotate with the camera
         currentCam=Camera.main;
-        uiPanel.transform.LookAt(uiPanel.transform.position + currentCam.transform.rotation * Vector3.forward,
-                             currentCam.transform.rotation * Vector3.up);
-       
+        var rotation= currentCam.transform.rotation;
+        transform.LookAt(transform.position+rotation*Vector3.forward, rotation * Vector3.up);
     }
     public bool IsDisplayed=false;
     public void SetUp(string theText){
