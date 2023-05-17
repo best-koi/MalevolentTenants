@@ -17,11 +17,6 @@ public class ItemPickUp : PersistentObject, IInteractable
 
     private bool isActive = true;
 
-    public void Start()
-    {
-        PlayerInventory.Instance.itemAddedEvent += Added;
-    }
-
     public bool Interact(Interactor interactor)
     {
         if (!isActive) return false;
@@ -31,20 +26,14 @@ public class ItemPickUp : PersistentObject, IInteractable
             createdItem = PlayerInventory.CreateInventoryItem(itemData, initialStack, string.Empty);
         }
 
-        PlayerInventory.Instance.AddItem(createdItem);
+        if (PlayerInventory.Instance.AddItem(createdItem))
+        {
+            isActive = false;
+
+            gameObject.SetActive(isActive);
+        }
 
         return true;
-    }
-
-    protected virtual void Added(InventoryItem item)
-    {
-        if (item != createdItem) return;
-
-        PlayerInventory.Instance.itemAddedEvent -= Added;
-
-        isActive = false;
-
-        gameObject.SetActive(isActive);
     }
 
     public override PersistentObjectData Save()
