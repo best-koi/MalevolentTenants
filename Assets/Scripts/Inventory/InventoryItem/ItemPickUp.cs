@@ -40,8 +40,8 @@ public class ItemPickUp : PersistentObject, IInteractable
     {
         List<string> data = new List<string>();
         
-        data.Add(createdItem != null ? createdItem.CurrentStack.ToString() : initialStack.ToString());
         data.Add(isActive ? "1" : "0");
+        data.Add(createdItem != null ? createdItem.CurrentStack.ToString() : initialStack.ToString());
         data.Add(createdItem != null ? createdItem.InstanceID : string.Empty);
 
         return new PersistentObjectData(data.ToArray());
@@ -49,14 +49,9 @@ public class ItemPickUp : PersistentObject, IInteractable
 
     public override void Load(PersistentObjectData POData)
     {
-        isActive = POData.data[1] == "1" ? true : false;
-
-        if (isActive)
-        {
-            string itemID = POData.data[2];
-            initialStack = int.Parse(POData.data[0]);
-            createdItem = InventoryItem.FindItemByID(itemID);
-        }
+        isActive = POData.data[0] == "1" ? true : false;
+        initialStack = int.Parse(POData.data[1]);
+        createdItem = InventoryItem.FindItemByID(POData.data[2]);
 
         gameObject.SetActive(isActive);
     }
