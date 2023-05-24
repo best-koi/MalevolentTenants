@@ -9,16 +9,16 @@ public class KeyPuzzle : MonoBehaviour, IInteractable
     [SerializeField] protected string text = "(E) Try Puzzle";
     public string interactionText => text;
 
-    [field: SerializeField] public bool solved { get; protected set; } = false;
+    [field: SerializeField] public bool isSolved { get; protected set; } = false;
 
     public bool Interact(Interactor interactor)
     {
         /*
         Stopgap until UI interfaces for interacting with and selecting items from inventory is added
-        Instead, could have KeyPuzzle listen to PlayerInventory.Instance.itemUsedEvent and handle logic there
+        Instead, could have KeyPuzzle listen to PlayerInventory.Instance.itemUsedEvent, use item selected from UI on selected puzzle, and handle logic there
         */
 
-        if (solved) return false;
+        if (isSolved) return false;
 
         List<InventoryItem> compatibleItems = PlayerInventory.Instance.FindItems(requiredKey);
 
@@ -35,6 +35,6 @@ public class KeyPuzzle : MonoBehaviour, IInteractable
     {
         Debug.LogFormat("KeyPuzzle: Puzzle solved");
 
-        solved = true;
+        isSolved = true;
     }
 }

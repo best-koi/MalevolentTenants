@@ -11,11 +11,15 @@ public class DoorManager : MonoBehaviour, IInteractable
 
     public bool Interact(Interactor interactor)
     {
-        if (puzzle.solved)
+        if (puzzle.isSolved)
         {
-            Debug.LogFormat("DoorManager: Door opened");
+            Debug.LogFormat("DoorManager.Interact Door opened");
+        }
+        else
+        {
+            Debug.LogFormat("DoorManager.Interact Door is still locked");
         }
 
-        return puzzle.solved;
+        return puzzle.isSolved;
     }
 }
