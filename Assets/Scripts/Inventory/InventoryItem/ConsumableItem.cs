@@ -16,6 +16,8 @@ public class ConsumableItem : InventoryItem
     {
         // TO DO: Do different actions based on (a yet created) enum var in ConsumableData
 
+        CurrentStack = CurrentStack - 1;
+
         return true;
     }
 }

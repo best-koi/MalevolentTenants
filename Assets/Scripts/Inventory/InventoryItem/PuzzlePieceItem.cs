@@ -31,6 +31,8 @@ public class PuzzlePieceItem : InventoryItem
        
         return result;
         */
+        
+        CurrentStack = CurrentStack - 1;
 
         return true; // Delete if implementing pseudocode
     }

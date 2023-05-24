@@ -142,8 +142,8 @@ public class PlayerInventory : PersistentObject
 
         if (!Inventory.Contains(item)) return false;
 
-        if (itemUsedEvent != null) itemUsedEvent(item);
         bool result = item.Use(others);
+        if (itemUsedEvent != null) itemUsedEvent(item);
 
         if (!ValidateItem(item)) DestroyItem(item);
 
