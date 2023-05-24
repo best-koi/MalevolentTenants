@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class ConsumableItem : InventoryItem
 {
-    [SerializeField] protected ConsumableData data;
+    [field: SerializeField] public ConsumableData data { get; protected set; }
 
     public ConsumableItem(ItemData data, int initialStack, string instanceID) : base(data, initialStack, instanceID)
     {

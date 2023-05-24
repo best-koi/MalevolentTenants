@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class WeaponItem : InventoryItem
 {
-    [SerializeField] protected WeaponData data;
+    [field: SerializeField] public WeaponData data { get; protected set; }
 
     public WeaponItem(ItemData data, int initialStack, string instanceID) : base(data, initialStack, instanceID)
     {

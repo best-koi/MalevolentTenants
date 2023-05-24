@@ -15,7 +15,7 @@ public class PlayerInventory : PersistentObject
 
     [SerializeField] private int maxInventorySpace;
 
-    private InventoryItem equippedItem;
+    public InventoryItem equippedItem { get; private set; }
 
     private void Awake()
     {
