@@ -16,12 +16,12 @@ public class Interactor : MonoBehaviour
         if(numFound>0){
             interactableItem = colliders[0].GetComponent<IInteractable>();
             if(interactableItem!=null){
-                if(!textinteraction.IsDisplayed) textinteraction.SetUp(interactableItem.interactionText);
+                if(textinteraction != null && !textinteraction.IsDisplayed) textinteraction.SetUp(interactableItem.interactionText);
                 if(Input.GetKeyDown(KeyCode.E))interactableItem.Interact(this);
             }
         }else{
             if(interactableItem!=null) interactableItem=null;
-            if(textinteraction.IsDisplayed) textinteraction.closePanel();
+            if(textinteraction != null && textinteraction.IsDisplayed) textinteraction.closePanel();
         }
     }
     private void OnDrawGizmos() {

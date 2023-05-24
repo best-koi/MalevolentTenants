@@ -135,12 +135,14 @@ public class PlayerInventory : PersistentObject
         return UseItem(equippedItem, others);
     }
 
+    public event Action<InventoryItem> itemUsedEvent;
     public bool UseItem(InventoryItem item, GameObject[] others = null)
     {
         if (item == null) return true;
 
         if (!Inventory.Contains(item)) return false;
 
+        if (itemUsedEvent != null) itemUsedEvent(item);
         bool result = item.Use(others);
 
         if (!ValidateItem(item)) DestroyItem(item);
