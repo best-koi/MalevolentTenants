@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class KeyPuzzle : MonoBehaviour, IInteractable
 {
-    [SerializeField] protected ItemData requiredKey;
+    [SerializeField] protected ItemData key;
 
     [SerializeField] protected string text = "(E) Try Puzzle";
     public string interactionText => text;
@@ -20,7 +20,7 @@ public class KeyPuzzle : MonoBehaviour, IInteractable
 
         if (isSolved) return false;
 
-        List<InventoryItem> compatibleItems = PlayerInventory.Instance.FindItems(requiredKey);
+        List<InventoryItem> compatibleItems = PlayerInventory.Instance.FindItems(key);
 
         if (compatibleItems.Count == 0) return false;
 
