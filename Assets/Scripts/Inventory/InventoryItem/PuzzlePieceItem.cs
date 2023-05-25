@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class PuzzlePieceItem : InventoryItem
 {
-    [SerializeField] protected PuzzlePieceData data;
+    [field: SerializeField] public PuzzlePieceData data { get; protected set; }
 
     public PuzzlePieceItem(ItemData data, int initialStack, string instanceID) : base(data, initialStack, instanceID)
     {
@@ -31,6 +31,8 @@ public class PuzzlePieceItem : InventoryItem
        
         return result;
         */
+        
+        CurrentStack = CurrentStack - 1;
 
         return true; // Delete if implementing pseudocode
     }
