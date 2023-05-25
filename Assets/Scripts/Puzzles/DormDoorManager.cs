@@ -11,9 +11,13 @@ public class DormDoorManager : MonoBehaviour, IInteractable
 
     public bool Interact(Interactor interactor)
     {
-        if (PlayerInventory.Instance.FindItems(key).Count > 0)
+        List<InventoryItem> keys = PlayerInventory.Instance.FindItems(key);
+
+        if (keys.Count > 0)
         {
             Debug.LogFormat("DoorManager.Interact Door opened");
+
+            PlayerInventory.Instance.UseItem(keys[0]);
 
             return true;
         }
