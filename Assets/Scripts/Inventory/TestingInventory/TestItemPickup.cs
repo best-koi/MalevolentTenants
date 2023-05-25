@@ -13,11 +13,11 @@ public class TestItemPickup : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q) && item != null)
         {
-            item.Interact();
+            item.Interact(null);
         }
         else if (Input.GetKeyDown(KeyCode.E) && otherItem != null)
         {
-            otherItem.Interact();
+            otherItem.Interact(null);
         }
     }
 }
