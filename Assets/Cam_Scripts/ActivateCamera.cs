@@ -17,4 +17,12 @@ public class ActivateCamera : MonoBehaviour
             cameraToDeactivate.SetActive(false);
         }
     }
+    /*void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player" && cameraToActivate.activeSelf != true)
+        {
+            cameraToActivate.SetActive(true);
+            cameraToDeactivate.SetActive(false);
+        }
+    }*/
 }
