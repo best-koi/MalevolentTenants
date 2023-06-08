@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class ConsumableItem : InventoryItem
 {
-    [SerializeField] protected ConsumableData data;
+    [field: SerializeField] public ConsumableData data { get; protected set; }
 
     public ConsumableItem(ItemData data, int initialStack, string instanceID) : base(data, initialStack, instanceID)
     {
@@ -15,6 +15,8 @@ public class ConsumableItem : InventoryItem
     public override bool Use(GameObject[] others = null)
     {
         // TO DO: Do different actions based on (a yet created) enum var in ConsumableData
+
+        CurrentStack = CurrentStack - 1;
 
         return true;
     }

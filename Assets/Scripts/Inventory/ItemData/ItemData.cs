@@ -17,7 +17,9 @@ public class ItemData : ScriptableObject
 
     public ItemType Type { get; protected set; }
 
-    [field: SerializeField] public Sprite Icon { get; protected set; }
+    [field: SerializeField] public Mesh ItemMesh { get; protected set; }
+
+    [field: SerializeField] public Sprite ItemIcon { get; protected set; }
 
     [field: SerializeField] public List<ItemData> CombinableItems { get; protected set; }
     [field: SerializeField] public List<ItemData> CombinedResults { get; protected set; }
@@ -36,7 +38,7 @@ public class ItemData : ScriptableObject
     }
     [SerializeField] private int requiredSpace = 1;
 
-    [field: SerializeField] public bool Equippable { get; protected set; }
+    [field: SerializeField] public bool Equippable { get; protected set; } = false;
 
     public bool ValidateCombinations(ItemData other)
     {

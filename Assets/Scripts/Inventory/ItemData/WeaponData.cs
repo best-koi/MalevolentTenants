@@ -12,6 +12,5 @@ public class WeaponData : ItemData
         base.Awake();
 
         Type = ItemType.Weapon;
-        Equippable = true;
     }
 }

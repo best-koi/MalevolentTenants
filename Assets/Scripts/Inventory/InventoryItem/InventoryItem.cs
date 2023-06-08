@@ -32,42 +32,34 @@ public abstract class InventoryItem
 
     public abstract bool Use(GameObject[] objs = null);
 
-    public event Action itemAdded;
     public virtual void OnAdded()
     {
-        if (itemAdded != null) itemAdded();
+
     }
 
-    public event Action itemRemoved;
     public virtual void OnRemoved()
     {
-        if (itemRemoved != null) itemRemoved();
+
     }
 
-    public event Action itemCombined;
     public virtual void OnCombined()
     {
         CurrentStack -= 1;
-
-        if (itemCombined != null) itemCombined();
     }
 
-    public event Action itemEquipped;
     public virtual void OnEquipped()
     {
-        if (itemEquipped != null) itemEquipped();
+
     }
 
-    public event Action itemUnequipped;
     public virtual void OnUnequipped()
     {
-        if (itemUnequipped != null) itemUnequipped();
+
     }
 
-    public event Action itemDestroyed;
     public virtual void OnDestroyed()
     {
-        if (itemDestroyed != null) itemDestroyed();
+
     }
 
     public ItemData CombineWith(InventoryItem otherItem)

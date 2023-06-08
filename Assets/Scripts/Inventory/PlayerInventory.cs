@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +15,7 @@ public class PlayerInventory : PersistentObject
 
     [SerializeField] private int maxInventorySpace;
 
-    private InventoryItem equippedItem;
+    public InventoryItem equippedItem { get; private set; }
 
     private void Awake()
     {
@@ -35,6 +37,7 @@ public class PlayerInventory : PersistentObject
         }
     }
 
+    public event Action<InventoryItem> itemAddedEvent;
     public bool AddItem(InventoryItem newItem)
     {
         if (newItem == null) return false;
@@ -43,7 +46,12 @@ public class PlayerInventory : PersistentObject
 
         foreach(InventoryItem item in Inventory)
         {
-            if (!ValidateItem(newItem)) return DestroyItem(newItem);
+            if (!ValidateItem(newItem))
+            {
+                if (itemAddedEvent != null) itemAddedEvent(newItem);
+
+                return DestroyItem(newItem);
+            }
 
             if (item.Data != newItem.Data) continue;
 
@@ -64,25 +72,27 @@ public class PlayerInventory : PersistentObject
 
         if (ValidateSpace(newItem.CurrentStack))
         {
-            newItem.OnAdded();
             Inventory.Add(newItem);
+            newItem.OnAdded();
+            if (itemAddedEvent != null) itemAddedEvent(newItem);
         }
 
         return true;
     }
 
+    public event Action<InventoryItem> itemRemovedEvent;
     public bool RemoveItem(InventoryItem removedItem)
     {
         if (removedItem == null) return false;
 
         if (!Inventory.Contains(removedItem)) return false;
 
-        removedItem.OnRemoved();
         Inventory.Remove(removedItem);
+        removedItem.OnRemoved();
+        if (itemRemovedEvent != null) itemRemovedEvent(removedItem);
 
         return true;
     }
-
     public bool Clear()
     {
         foreach (InventoryItem item in Inventory)
@@ -93,34 +103,15 @@ public class PlayerInventory : PersistentObject
 
     public List<InventoryItem> FindItems(ItemData data)
     {
-        List<InventoryItem> foundItems = new List<InventoryItem>();
-
-        foreach (InventoryItem item in Inventory)
-        {
-            if (item.Data == data)
-            {
-                foundItems.Add(item);
-            }
-        }
-
-        return foundItems;
+        return Inventory.Where(item => item.Data == data).ToList();
     }
 
     public List<InventoryItem> FindItemsByType(ItemType type)
     {
-        List<InventoryItem> foundItems = new List<InventoryItem>();
-
-        foreach (InventoryItem item in Inventory)
-        {
-            if (item.Data.Type == type)
-            {
-                foundItems.Add(item);
-            }
-        }
-
-        return foundItems;
+        return Inventory.Where(item => item.Data.Type == type).ToList();
     }
 
+    public event Action<InventoryItem, InventoryItem> itemCombinedEvent;
     public InventoryItem CombineItems(InventoryItem item, InventoryItem otherItem, int initialStack)
     {
         if (item == null || otherItem == null) return null;
@@ -134,6 +125,8 @@ public class PlayerInventory : PersistentObject
         if (!ValidateItem(item)) DestroyItem(item);
         if (!ValidateItem(otherItem)) DestroyItem(otherItem);
 
+        if (itemCombinedEvent != null) itemCombinedEvent(item, otherItem);
+
         return CreateInventoryItem(combinedResult, initialStack, string.Empty);
     }
 
@@ -142,6 +135,7 @@ public class PlayerInventory : PersistentObject
         return UseItem(equippedItem, others);
     }
 
+    public event Action<InventoryItem> itemUsedEvent;
     public bool UseItem(InventoryItem item, GameObject[] others = null)
     {
         if (item == null) return true;
@@ -149,18 +143,23 @@ public class PlayerInventory : PersistentObject
         if (!Inventory.Contains(item)) return false;
 
         bool result = item.Use(others);
+        if (itemUsedEvent != null) itemUsedEvent(item);
 
         if (!ValidateItem(item)) DestroyItem(item);
 
         return result;
     }
 
+    public event Action<InventoryItem> itemEquippedEvent;
+    public event Action<InventoryItem> itemUnequippedEvent;
     public bool EquipItem(InventoryItem item)
     {
         if (item == null)
         {
             if (equippedItem != null) equippedItem.OnUnequipped();
+            if (itemUnequippedEvent != null) itemUnequippedEvent(equippedItem);
             equippedItem = null;
+
             return true;
         }
 
@@ -169,8 +168,12 @@ public class PlayerInventory : PersistentObject
         if (!item.Data.Equippable) return false;
 
         if (equippedItem != null) equippedItem.OnUnequipped();
-        item.OnEquipped();
+        if (itemUnequippedEvent != null) itemUnequippedEvent(equippedItem);
+
         equippedItem = item;
+
+        equippedItem.OnEquipped();
+        if (itemEquippedEvent != null) itemEquippedEvent(item);
 
         return true;
     }
@@ -194,6 +197,7 @@ public class PlayerInventory : PersistentObject
         return availableSpace >= requiredSpace;
     }
 
+    public event Action<InventoryItem> itemDestroyedEvent;
     private bool DestroyItem(InventoryItem item)
     {
         if (item == null) return true;
@@ -201,6 +205,7 @@ public class PlayerInventory : PersistentObject
         if (Inventory.Contains(item)) Inventory.Remove(item);
 
         item.OnDestroyed();
+        if (itemDestroyedEvent != null) itemDestroyedEvent(item);
 
         return true;
     }
