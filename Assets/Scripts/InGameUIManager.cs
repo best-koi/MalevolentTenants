@@ -64,7 +64,7 @@ public class InGameUIManager : MonoBehaviour
 
         lockImage.gameObject.SetActive(true);
         lockImage.sprite = locked;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         lockImage.sprite = opened;
         yield return new WaitForSeconds(2f);
         lockImage.gameObject.SetActive(false);
