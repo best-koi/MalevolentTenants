@@ -7,6 +7,7 @@ public class Door_work : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (ReferencePuzzle.solved)
-         Debug.Log("You Win");
+            //Debug.Log("You Win");
+            InGameUIManager.Instance.YouEscapedToggle(true);
     }
 }

@@ -8,6 +8,7 @@ public class PuzzleTrigger : MonoBehaviour
     void OnTriggerEnter (Collider other)
     {
         solved = true;
-        Debug.Log("Door Unlocked!");
+        //Debug.Log("Door Unlocked!");
+        InGameUIManager.Instance.DoorUnlocked();
     }
 }
