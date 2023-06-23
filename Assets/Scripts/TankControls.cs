@@ -17,7 +17,7 @@ public class TankControls : MonoBehaviour
 
     private void Start()
     {
-        //playerAnimator = gameObject.GetComponent<Animator>();
+        playerAnimator = gameObject.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -28,7 +28,7 @@ public class TankControls : MonoBehaviour
             isMoving = true;
 
             // :::For walk animation:::
-            //playerAnimator.Play("Walk")
+            playerAnimator.SetBool("isMoving", isMoving);
 
             horizontalMove = Input.GetAxis("Horizontal") * Time.deltaTime * rotationSpeed;
             verticalMove = Input.GetAxis("Vertical") * Time.deltaTime * movementSpeed;
@@ -41,7 +41,8 @@ public class TankControls : MonoBehaviour
             isMoving = false;
 
             // :::For idle animation:::
-            //playerAnimator.Play("Idle");
+            playerAnimator.SetBool("isMoving", isMoving);
+
         }
     }
 }
